@@ -1,0 +1,104 @@
+def ingresar_paciente ():
+    print ("Introduzca los datos solicitados del paciente: ")
+    dni = input("DNI: ")
+    nombre = str.title(input("Nombre completo: "))
+    edad = int(input("Edad (años): "))
+    sexo = str.upper(input("Sexo biológico (F/M): "))
+    af = int(input ("Nivel de actividad física (1 - Sedentario; 2 - Moderado; 3 - Intenso): "))
+    if af == 1:
+        naf = 1.2
+    elif af == 2:
+        naf = 1.55
+    elif af == 3:
+        naf = 1.75
+    peso = float (input ("Peso (Kg): "))
+    altura = float (input ("Altura (m): "))
+    imc = round(peso /(altura * altura),2)
+    if imc < 18.5:
+        e_nutricional = "Bajo peso"
+    elif imc >= 18.5 and imc <25:
+        e_nutricional = "Peso normal"
+    elif imc >= 25 and imc <30:
+        e_nutricional = "Sobrepeso"
+    else:
+        e_nutricional = "Obesidad"
+    control = str.upper(input("Es un paciente de control (S/N): "))
+    def formula_red ():
+        if sexo == 'M':
+            tmb = ((10 * peso) + ((6.25*altura)*100) - (5*edad) + 5)
+            if e_nutricional == "Bajo peso":
+                red = (tmb * naf) * 1.2
+            elif e_nutricional == "Peso normal":
+                red = (tmb * naf)
+            elif e_nutricional == "Sobrepeso" or e_nutricional == "Obesidad":
+                red = (tmb*naf) - [(tmb*naf) *0.2]
+            else:
+                print ("Error de datos")
+        elif sexo == 'F':
+            tmb = ((10 * peso) + ((6.25*altura)*100) - (5*edad) - 161)
+            if e_nutricional == "Bajo peso":
+                red = (tmb * naf) * 1.2
+            elif e_nutricional == "Peso normal":
+                red = (tmb * naf)
+            elif e_nutricional == "Sobrepeso" or e_nutricional == "Obesidad":
+                red = (tmb*naf) - [(tmb*naf) *0.2]
+            else:
+                print ("Error de datos")
+        return red
+    red = (formula_red())
+    datos = {"Nombre": nombre, "Edad": edad, "Sexo biológico": sexo, "Nivel de actividad física": naf, "IMC": imc, "Estado Nutricional": e_nutricional,"Requerimiento Energético Diario": red, "control" : control == "S"}
+    pacientes [dni] = datos
+
+def mostrar_paciente (dni):
+    if dni in pacientes: 
+        print('DNI:', dni)   
+        for clave, valor in pacientes[dni].items():
+            print(clave.title() + ':', valor)
+    else:
+        print('No existe el paciente con el DNI', dni)
+
+def eliminar_paciente (dni):
+    if dni in pacientes:   
+        del pacientes[dni]  
+    else:
+        print('No existe el paciente con el DNI', dni)
+
+def lista_pacientes ():
+    print('LISTA DE PACIENTES')
+    for clave, valor in pacientes.items():
+        print(clave, valor)
+
+def pacientes_control ():
+    print('LISTA DE PACIENTES DE CONTROL')
+    for clave, valor in pacientes.items():
+        if valor['control']:
+            print(clave, valor)
+
+import math
+
+print ("BIENVENIDO AL SISTEMA DE GESTIÓN DE PACIENTES")
+
+pacientes = {}
+opcion = ''
+
+print ('Seleccione una opción del siguiente menú:')
+while opcion != '6':
+    if opcion == '1':
+        ingresar_paciente()
+    if opcion == "2":
+        dni = input("Ingrese el DNI del paciente que desea buscar: ")
+        mostrar_paciente(dni)
+    if opcion == "3": 
+        dni = input("Ingrese el DNI del paciente que desea eliminar: ")
+        eliminar_paciente (dni)
+    if opcion == "4":
+        lista_pacientes()
+    if opcion == "5":
+        pacientes_control()
+    
+    opcion = input('Menú de opciones\n1 - Ingresar paciente\n2 - Mostrar paciente\n3 - Eliminar paciente\n4 - Listar pacientes\n5 - Listar pacientes de control\n6 - Terminar\nElige una opción:')
+
+
+
+
+    
