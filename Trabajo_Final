@@ -1,4 +1,4 @@
-def ingresar_paciente ():
+#def ingresar_paciente ():
     print ("Introduzca los datos solicitados del paciente: ")
     dni = input("DNI: ")
     nombre = str.title(input("Nombre completo: "))
