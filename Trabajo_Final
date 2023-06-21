@@ -31,7 +31,7 @@ def ingresar_paciente ():
             elif e_nutricional == "Peso normal":
                 red = (tmb * naf)
             elif e_nutricional == "Sobrepeso" or e_nutricional == "Obesidad":
-                red = (tmb*naf) - [(tmb*naf) *0.2]
+                red = (tmb*naf) - ((tmb*naf) *0.2)
             else:
                 print ("Error de datos")
         elif sexo == 'F':
@@ -41,7 +41,7 @@ def ingresar_paciente ():
             elif e_nutricional == "Peso normal":
                 red = (tmb * naf)
             elif e_nutricional == "Sobrepeso" or e_nutricional == "Obesidad":
-                red = (tmb*naf) - [(tmb*naf) *0.2]
+                red = (tmb*naf) - ((tmb*naf) *0.2)
             else:
                 print ("Error de datos")
         return red
