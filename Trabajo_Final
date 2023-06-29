@@ -3,8 +3,13 @@ import pandas as pd
 def ingresar_paciente():
     print("Introduzca los datos solicitados del paciente:")
     dni = input("DNI: ")
-    nombre = str.title(input("Nombre completo: "))
-    edad = int(input("Edad (años): "))
+    nombre = input("Nombre completo: ").title()
+While True:
+    try:
+        edad = int(input("Edad (años): "))
+        break
+    Except Valueerror:
+        print("Error: Por favor, ingrese un número valido para la edad")
     sexo = str.upper(input("Sexo biológico (F/M): "))
     af = int(input("Nivel de actividad física (1 - Sedentario; 2 - Moderado; 3 - Intenso): "))
     if af == 1:
