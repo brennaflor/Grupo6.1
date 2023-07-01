@@ -6,18 +6,29 @@ def ingresar_paciente():
     nombre = input("Nombre completo: ").title()
 While True:
     try:
-        edad = int(input("Edad (años): "))
+        edad = int(input("Edad (años): ")) # Intenta convertir la entrada a un entero
         break
-    Except Valueerror:
-        print("Error: Por favor, ingrese un número valido para la edad")
+    except Valueerror:
+        print("Error: Por favor, ingrese un número valido para la edad")  # Intenta convertir la entrada a un entero
+            if af < 1 or af > 3:
     sexo = str.upper(input("Sexo biológico (F/M): "))
-    af = int(input("Nivel de actividad física (1 - Sedentario; 2 - Moderado; 3 - Intenso): "))
+ while True:
+        try:
+            af = int(input("Nivel de actividad física (1 - Sedentario; 2 - Moderado; 3 - Intenso): "))  # Intenta convertir la entrada a un entero
+            if af < 1 or af > 3:
+            if af < 1 or af > 3:
+                raise ValueError
+               break
+        except ValueError:
+            print("Error: Por favor, ingrese un número válido para el nivel de actividad física (1, 2 o 3)")  # Intenta convertir la entrada a un entero
+            if af < 1 or af > 3:
     if af == 1:
         naf = 1.2
     elif af == 2:
         naf = 1.55
     elif af == 3:
         naf = 1.75
+
     peso = float(input("Peso (Kg): "))
     altura = float(input("Altura (m): "))
     imc = round(peso / (altura * altura), 2)
@@ -29,7 +40,7 @@ While True:
         e_nutricional = "Sobrepeso"
     else:
         e_nutricional = "Obesidad"
-    control = str.upper(input("Es un paciente de control (S/N): "))
+    control = input("Es un paciente de control (S/N): ").upeer()
 
     def formula_red():
         if sexo == 'M':
@@ -64,7 +75,7 @@ While True:
         "IMC": imc,
         "Estado Nutricional": e_nutricional,
         "Requerimiento Energético Diario": red,
-        "Control": control == "S"
+        "Control": "Es un paciente de control" if control == "S" else "No es un paciente de control" # lo modifique y ya no devuelve True o False
     }
     pacientes[dni] = datos
     print("Paciente agregado correctamente.")
@@ -81,16 +92,25 @@ While True:
     Try:
        edad = int(input("Edad (años): "))
        break
-    Except Valueerror:
+    except Valueerror:
         print("Error: Por favor, ingrese un número valido para la edad")
         sexo = str.upper(input("Sexo biológico (F/M): "))
-        af = int(input("Nivel de actividad física (1 - Sedentario; 2 - Moderado; 3 - Intenso): "))
-        if af == 1:
-            naf = 1.2
-        elif af == 2:
-            naf = 1.55
-        elif af == 3:
-            naf = 1.75
+while True:
+        try:
+            af = int(input("Nivel de actividad física (1 - Sedentario; 2 - Moderado; 3 - Intenso): "))  # Intenta convertir la entrada a un entero
+            if af < 1 or af > 3:
+            if af < 1 or af > 3:
+                raise ValueError
+               break
+        except ValueError:
+            print("Error: Por favor, ingrese un número válido para el nivel de actividad física (1, 2 o 3)")  # Intenta convertir la entrada a un entero
+            if af < 1 or af > 3:
+    if af == 1:
+        naf = 1.2
+    elif af == 2:
+        naf = 1.55
+    elif af == 3:
+        naf = 1.75
         peso = float(input("Peso (Kg): "))
         altura = float(input("Altura (m): "))
         imc = round(peso / (altura * altura), 2)
@@ -102,7 +122,7 @@ While True:
             e_nutricional = "Sobrepeso"
         else:
             e_nutricional = "Obesidad"
-        control = str.upper(input("Es un paciente de control (S/N): "))
+        control = input("Es un paciente de control (S/N): ").upper()
 
         def formula_red():
             if sexo == 'M':
