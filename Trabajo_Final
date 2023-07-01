@@ -155,8 +155,10 @@ while True:
         pacientes[dni]["IMC"] = imc
         pacientes[dni]["Estado Nutricional"] = e_nutricional
         pacientes[dni]["Requerimiento Energético Diario"] = red
-        pacientes[dni]["Control"] = control == "S"
-
+        if control.upper() == "S":
+          pacientes[dni]["Control"] = "Es un paciente de control"
+        else:
+               pacientes[dni]["Control"] = "No es un paciente de control"
         print("Paciente modificado correctamente.")
     else:
         print("No existe el paciente con el DNI", dni)
