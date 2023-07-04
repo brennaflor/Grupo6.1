@@ -1,8 +1,14 @@
 import pandas as pd
+import openpyxl
 
 def ingresar_paciente():
     print("Introduzca los datos solicitados del paciente:")
     dni = input("DNI: ")
+
+    if dni in pacientes:
+        print("Ya existe un paciente con el DNI", dni)
+        return
+
     nombre = input("Nombre completo: ").title()
     while True: # Intenta convertir la entrada a un entero
         try:
@@ -10,7 +16,12 @@ def ingresar_paciente():
             break
         except ValueError:
             print("Error: Por favor, ingrese un número valido para la edad")  
-    sexo = str.upper(input("Sexo biológico (F/M): "))
+    while True:
+        sexo = input("Sexo biológico (F/M): ").upper()
+        if sexo == "F" or sexo == "M":
+            break
+        else:
+            print("Error: Por favor, ingrese 'F' para femenino o 'M' para masculino")
     while True:   # Intenta convertir la entrada a un entero del 1 al 3
         try:
             af = int(input("Nivel de actividad física (1 - Sedentario; 2 - Moderado; 3 - Intenso): "))
@@ -23,8 +34,19 @@ def ingresar_paciente():
             break
         except ValueError:
             print("Error: Por favor, ingrese un número válido para el nivel de actividad física (1, 2 o 3)")
-    peso = float(input("Peso (Kg): "))
-    altura = float(input("Altura (m): "))
+    while True:
+        try:
+            peso = float(input("Peso (Kg): "))
+            break
+        except ValueError:
+            print("Error: Por favor, ingrese un número válido para el peso")
+
+    while True:
+        try:
+            altura = float(input("Altura (m): "))
+            break
+        except ValueError:
+            print("Error: Por favor, ingrese un número válido para la altura")
     imc = round(peso / (altura * altura), 2)
     if imc < 18.5:
         e_nutricional = "Bajo peso"
@@ -34,7 +56,12 @@ def ingresar_paciente():
         e_nutricional = "Sobrepeso"
     else:
         e_nutricional = "Obesidad"
-    control = input("Es un paciente de control (S/N): ").upper()
+    while True:
+        control = input("Es un paciente de control (S/N): ").upper()
+        if control == "S" or control == "N":
+            break
+        else:
+            print("Error: Por favor, ingrese 'S' para sí o 'N' para no")
 
     def formula_red():
         if sexo == 'M':
@@ -154,14 +181,52 @@ def modificar_paciente(dni):
     else:
         print("No existe el paciente con el DNI", dni)
 
+
 def guardar_en_excel():
     if not pacientes:
         print("No hay pacientes registrados.")
         return
 
-    df = pd.DataFrame(pacientes.values())
-    df.to_excel("pacientes.xlsx", index=False)
-    print("Los datos se han guardado en el archivo pacientes.xlsx.")
+    try:
+        # Cargar datos existentes del archivo
+        df = pd.DataFrame()
+        try:
+            df = pd.read_excel("pacientes.xlsx")
+        except FileNotFoundError:
+            pass
+
+        # Crear DataFrame con los datos actuales y agregarlo al DataFrame existente
+        df_nuevos = pd.DataFrame(pacientes.values())
+        df = pd.concat([df, df_nuevos])
+
+        # Guardar el DataFrame actualizado en el archivo
+        df.to_excel("pacientes.xlsx", index=False)
+
+        print("Los datos se han guardado en el archivo pacientes.xlsx.")
+    except Exception as e:
+        print("Ocurrió un error al guardar los pacientes:", str(e))
+
+def cargar_pacientes_desde_excel():
+    try:
+        df = pd.read_excel("pacientes.xlsx")
+        pacientes.clear()
+        for _, row in df.iterrows():
+            paciente = {
+                "DNI": row["DNI"],
+                "Nombre": row["Nombre"],
+                "Edad": row["Edad"],
+                "Sexo biológico": row["Sexo biológico"],
+                "Nivel de actividad física": row["Nivel de actividad física"],
+                "IMC": row["IMC"],
+                "Estado Nutricional": row["Estado Nutricional"],
+                "Requerimiento Energético Diario": row["Requerimiento Energético Diario"],
+                "Control": row["Control"]
+            }
+            pacientes[row["DNI"]] = paciente
+    except FileNotFoundError:
+        print("No se encontró el archivo pacientes.xlsx.")
+    except Exception as e:
+        print("Ocurrió un error al cargar los pacientes:", str(e))
 
 def mostrar_paciente(dni):
     if dni in pacientes:
@@ -174,6 +239,7 @@ def mostrar_paciente(dni):
 def eliminar_paciente(dni):
     if dni in pacientes:
         del pacientes[dni]
+        guardar_en_excel()
         print("Paciente eliminado correctamente.")
     else:
         print("No existe el paciente con el DNI", dni)
@@ -195,7 +261,7 @@ def pacientes_control():
     else:
         print("\nLISTA DE PACIENTES DE CONTROL")
         for dni, datos in pacientes.items():
-            if datos["Control"]:
+            if datos["Control"] == "Es un paciente de control":  # Verificar si el paciente es de control
                 print("DNI:", dni)
                 for clave, valor in datos.items():
                     print(clave + ":", valor)
@@ -204,6 +270,7 @@ def pacientes_control():
 print("BIENVENIDO AL SISTEMA DE GESTIÓN DE PACIENTES")
 
 pacientes = {}
+cargar_pacientes_desde_excel()
 
 def menu():
     opcion = ""
