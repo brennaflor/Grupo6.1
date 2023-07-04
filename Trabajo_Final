@@ -1,9 +1,10 @@
 import pandas as pd
 import openpyxl
 
+#PARA EJECUTARLO DEBE DE INSTALAR PANDAS Y OPENPYXL
+
 def ingresar_paciente():
     print("Introduzca los datos solicitados del paciente:")
-    #dni = int(input("DNI(sin puntos): "))
     while True: # Intenta convertir la entrada a un entero
         try:
             dni = int(input("DNI(sin puntos): ")) 
@@ -238,13 +239,6 @@ def cargar_pacientes_desde_excel():
     except Exception as e:
         print("Ocurrió un error al cargar los pacientes:", str(e))
 
-def mostrar_paciente(dni):
-    if dni in pacientes:
-        print("\nDatos del paciente con DNI:", dni)
-        for clave, valor in pacientes[dni].items():
-            print(clave + ":", valor)
-    else:
-        print("No existe el paciente con el DNI", dni)
 
 def eliminar_paciente(dni):
     if dni in pacientes:
@@ -265,18 +259,6 @@ def lista_pacientes():
                 print(clave + ":", valor)
             print()
 
-def pacientes_control():
-    if not pacientes:
-        print("No hay pacientes registrados.")
-    else:
-        print("\nLISTA DE PACIENTES DE CONTROL")
-        for dni, datos in pacientes.items():
-            if datos["Control"] == "Es un paciente de control":  # Verificar si el paciente es de control
-                print("DNI:", dni)
-                for clave, valor in datos.items():
-                    print(clave + ":", valor)
-                print()
-
 print("BIENVENIDO AL SISTEMA DE GESTIÓN DE PACIENTES")
 
 pacientes = {}
@@ -284,37 +266,30 @@ cargar_pacientes_desde_excel()
 
 def menu():
     opcion = ""
-    while opcion != "8":
+    while opcion != "6":
         print("\n===== Consultorio de Nutrición =====")
         print("1. Ingresar paciente")
-        print("2. Mostrar paciente")
+        print("2. Listar pacientes")
         print("3. Eliminar paciente")
-        print("4. Listar pacientes")
-        print("5. Listar pacientes de control")
-        print("6. Modificar paciente")
-        print("7. Guardar lista")
-        print("8. Terminar")
+        print("4. Modificar paciente")
+        print("5. Guardar lista")
+        print("6. Terminar")
 
         opcion = input("Elige una opción: ")
 
         if opcion == "1":
             ingresar_paciente()
         elif opcion == "2":
-            dni = input("Ingrese el DNI del paciente que desea buscar: ")
-            mostrar_paciente(dni)
+            lista_pacientes()
         elif opcion == "3":
             dni = input("Ingrese el DNI del paciente que desea eliminar: ")
             eliminar_paciente(dni)
         elif opcion == "4":
-            lista_pacientes()
-        elif opcion == "5":
-            pacientes_control()
-        elif opcion == "6":
             dni = input("Ingrese el DNI del paciente que desea modificar: ")
             modificar_paciente(dni)
-        elif opcion == "7":
+        elif opcion == "5":
             guardar_en_excel()
-        elif opcion == "8":
+        elif opcion == "6":
             print("¡Hasta luego!")
         else:
             print("Opción inválida. Por favor, ingrese una opción válida.")
