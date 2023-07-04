@@ -27,7 +27,7 @@ def ingresar_paciente():
             break
         else:
             print("Error: Por favor, ingrese 'F' para femenino o 'M' para masculino")
-    while True:   # Intenta convertir la entrada a un entero del 1 al 3
+    while True:
         try:
             af = int(input("Nivel de actividad física (1 - Sedentario; 2 - Moderado; 3 - Intenso): "))
             if af == 1:
@@ -36,6 +36,9 @@ def ingresar_paciente():
                 naf = 1.55
             elif af == 3:
                 naf = 1.75
+            else:
+                print("Error: Por favor, ingrese un número válido para el nivel de actividad física (1, 2 o 3)")
+                continue
             break
         except ValueError:
             print("Error: Por favor, ingrese un número válido para el nivel de actividad física (1, 2 o 3)")
