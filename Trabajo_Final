@@ -1,6 +1,8 @@
 import pandas as pd
 import openpyxl
 
+#PARA EJECUTARLO DEBE DE INSTALAR PANDAS Y OPENPYXL
+
 def ingresar_paciente():
     print("Introduzca los datos solicitados del paciente:")
     while True: # Intenta convertir la entrada a un entero
@@ -95,7 +97,7 @@ def ingresar_paciente():
                 print("Error de datos")
         return red
 
-    red = formula_red()
+    red = round(formula_red(),2)
     datos = {
         "DNI": dni,
         "Nombre": nombre,
@@ -105,8 +107,9 @@ def ingresar_paciente():
         "IMC": imc,
         "Estado Nutricional": e_nutricional,
         "Requerimiento Energético Diario": red,
-        "Control": control == "S"
+        "Control": control
     }
+    
     pacientes[dni] = datos
     print("Paciente agregado correctamente.")
 
@@ -114,56 +117,65 @@ def modificar_paciente(dni):
     if dni in pacientes:
         print("\nDatos actuales del paciente con DNI:", dni)
         for clave, valor in pacientes[dni].items():
-            print(clave + ":", valor)
-        
-        print("\nIngrese los nuevos datos del paciente:")
-        nombre = str.title(input("Nombre completo: "))
-        edad = int(input("Edad (años): "))
-        sexo = str.upper(input("Sexo biológico (F/M): "))
-        af = int(input("Nivel de actividad física (1 - Sedentario; 2 - Moderado; 3 - Intenso): "))
-        if af == 1:
-            naf = 1.2
-        elif af == 2:
-            naf = 1.55
-        elif af == 3:
-            naf = 1.75
-        peso = float(input("Peso (Kg): "))
-        altura = float(input("Altura (m): "))
-        imc = round(peso / (altura * altura), 2)
-        if imc < 18.5:
-            e_nutricional = "Bajo peso"
-        elif imc >= 18.5 and imc < 25:
-            e_nutricional = "Peso normal"
-        elif imc >= 25 and imc < 30:
-            e_nutricional = "Sobrepeso"
-        else:
-            e_nutricional = "Obesidad"
-        control = str.upper(input("Es un paciente de control (S/N): "))
+            print(clave + ":", valor)    
+            print("\nIngrese los nuevos datos del paciente:")
+            nombre = input("Nombre completo: ").title()
+            while True:
+                try:
+                    edad = int(input("Edad (años): "))
+                    break
+                except ValueError:
+                    print("Error: Por favor, ingrese un número valido para la edad")
+            sexo = str.upper(input("Sexo biológico (F/M): "))
+            while True:
+                try:
+                    af = int(input("Nivel de actividad física (1 - Sedentario; 2 - Moderado; 3 - Intenso): "))
+                    if af == 1:
+                        naf = 1.2
+                    elif af == 2:
+                        naf = 1.55
+                    elif af == 3:
+                        naf = 1.75
+                    break
+                except ValueError:
+                    print("Error: Por favor, ingrese un número válido para el nivel de actividad física (1, 2 o 3)")
+            peso = float(input("Peso (Kg): "))
+            altura = float(input("Altura (m): "))
+            imc = round(peso / (altura * altura), 2)
+            if imc < 18.5:
+                e_nutricional = "Bajo peso"
+            elif imc >= 18.5 and imc < 25:
+                e_nutricional = "Peso normal"
+            elif imc >= 25 and imc < 30:
+                e_nutricional = "Sobrepeso"
+            else:
+                e_nutricional = "Obesidad"
+            control = input("Es un paciente de control (S/N): ").upper()
 
-        def formula_red():
-            if sexo == 'M':
-                tmb = ((10 * peso) + ((6.25 * altura) * 100) - (5 * edad) + 5)
-                if e_nutricional == "Bajo peso":
-                    red = (tmb * naf) * 1.2
-                elif e_nutricional == "Peso normal":
-                    red = (tmb * naf)
-                elif e_nutricional == "Sobrepeso" or e_nutricional == "Obesidad":
-                    red = (tmb * naf) - ((tmb * naf) * 0.2)
-                else:
-                    print("Error de datos")
-            elif sexo == 'F':
-                tmb = ((10 * peso) + ((6.25 * altura) * 100) - (5 * edad) - 161)
-                if e_nutricional == "Bajo peso":
-                    red = (tmb * naf) * 1.2
-                elif e_nutricional == "Peso normal":
-                    red = (tmb * naf)
-                elif e_nutricional == "Sobrepeso" or e_nutricional == "Obesidad":
-                    red = (tmb * naf) - ((tmb * naf) * 0.2)
+            def formula_red():
+                if sexo == 'M':
+                    tmb = ((10 * peso) + ((6.25 * altura) * 100) - (5 * edad) + 5)
+                    if e_nutricional == "Bajo peso":
+                        red = (tmb * naf) * 1.2
+                    elif e_nutricional == "Peso normal":
+                        red = (tmb * naf)
+                    elif e_nutricional == "Sobrepeso" or e_nutricional == "Obesidad":
+                        red = (tmb * naf) - ((tmb * naf) * 0.2)
+                    else:
+                        print("Error de datos")
+                elif sexo == 'F':
+                    tmb = ((10 * peso) + ((6.25 * altura) * 100) - (5 * edad) - 161)
+                    if e_nutricional == "Bajo peso":
+                        red = (tmb * naf) * 1.2
+                    elif e_nutricional == "Peso normal":
+                        red = (tmb * naf)
+                    elif e_nutricional == "Sobrepeso" or e_nutricional == "Obesidad":
+                        red = (tmb * naf) - ((tmb * naf) * 0.2)
                 else:
                     print("Error de datos")
             return red
 
-        red = formula_red()
+        red = round(formula_red(),2)
         pacientes[dni]["Nombre"] = nombre
         pacientes[dni]["Edad"] = edad
         pacientes[dni]["Sexo biológico"] = sexo
@@ -171,8 +183,10 @@ def modificar_paciente(dni):
         pacientes[dni]["IMC"] = imc
         pacientes[dni]["Estado Nutricional"] = e_nutricional
         pacientes[dni]["Requerimiento Energético Diario"] = red
-        pacientes[dni]["Control"] = control == "S"
-
+        if control.upper() == "S":
+          pacientes[dni]["Control"] = "Es un paciente de control"
+        else:
+            pacientes[dni]["Control"] = "No es un paciente de control"
         print("Paciente modificado correctamente.")
     else:
         print("No existe el paciente con el DNI", dni)
@@ -183,63 +197,55 @@ def guardar_en_excel():
         print("No hay pacientes registrados.")
         return
 
-    df = pd.DataFrame(pacientes.values())
-    df.to_excel("pacientes.xlsx", index=False)
-    print("Los datos se han guardado en el archivo pacientes.xlsx.")
+    try:
+        # Cargar datos existentes del archivo
+        df = pd.DataFrame()
+        try:
+            df = pd.read_excel("pacientes.xlsx")
+        except FileNotFoundError:
+            pass
 
+        # Crear DataFrame con los datos actuales y agregarlo al DataFrame existente
+        df_nuevos = pd.DataFrame(pacientes.values())
+        df = pd.concat([df, df_nuevos])
 
-def menu():
-    opcion = ""
-    while opcion != "7":
-        print("\n===== Consultorio de Nutrición =====")
-        print("1. Ingresar paciente")
-        print("2. Mostrar paciente")
-        print("3. Eliminar paciente")
-        print("4. Listar pacientes")
-        print("5. Listar pacientes de control")
-        print("6. Modificar paciente")
-        print("7. Terminar")
+        # Guardar el DataFrame actualizado en el archivo
+        df.to_excel("pacientes.xlsx", index=False)
 
-        opcion = input("Elige una opción: ")
+        print("Los datos se han guardado en el archivo pacientes.xlsx.")
+    except Exception as e:
+        print("Ocurrió un error al guardar los pacientes:", str(e))
 
-        if opcion == "1":
-            ingresar_paciente()
-        elif opcion == "2":
-            dni = input("Ingrese el DNI del paciente que desea buscar: ")
-            mostrar_paciente(dni)
-        elif opcion == "3":
-            dni = input("Ingrese el DNI del paciente que desea eliminar: ")
-            eliminar_paciente(dni)
-        elif opcion == "4":
-            lista_pacientes()
-        elif opcion == "5":
-            pacientes_control()
-        elif opcion == "6":
-            dni = input("Ingrese el DNI del paciente que desea modificar: ")
-            modificar_paciente(dni)
-        elif opcion == "7":
-            print("¡Hasta luego!")
-        else:
-            print("Opción inválida. Por favor, ingrese una opción válida.")
-
-
-
-def mostrar_paciente(dni):
-    if dni in pacientes:
-        print("\nDatos del paciente con DNI:", dni)
-        for clave, valor in pacientes[dni].items():
-            print(clave + ":", valor)
-    else:
-        print("No existe el paciente con el DNI", dni)
+def cargar_pacientes_desde_excel():
+    try:
+        df = pd.read_excel("pacientes.xlsx")
+        pacientes.clear()
+        for _, row in df.iterrows():
+            paciente = {
+                "DNI": row["DNI"],
+                "Nombre": row["Nombre"],
+                "Edad": row["Edad"],
+                "Sexo biológico": row["Sexo biológico"],
+                "Nivel de actividad física": row["Nivel de actividad física"],
+                "IMC": row["IMC"],
+                "Estado Nutricional": row["Estado Nutricional"],
+                "Requerimiento Energético Diario": row["Requerimiento Energético Diario"],
+                "Control": row["Control"]
+            }
+            pacientes[row["DNI"]] = paciente
+    except FileNotFoundError:
+        print("No se encontró el archivo pacientes.xlsx.")
+    except Exception as e:
+        print("Ocurrió un error al cargar los pacientes:", str(e))
 
 
 def eliminar_paciente(dni):
     if dni in pacientes:
         del pacientes[dni]
+        guardar_en_excel()
         print("Paciente eliminado correctamente.")
     else:
         print("No existe el paciente con el DNI", dni)
-
 
 def lista_pacientes():
     if not pacientes:
@@ -252,23 +258,41 @@ def lista_pacientes():
                 print(clave + ":", valor)
             print()
 
-
-def pacientes_control():
-    if not pacientes:
-        print("No hay pacientes registrados.")
-    else:
-        print("\nLISTA DE PACIENTES DE CONTROL")
-        for dni, datos in pacientes.items():
-            if datos["Control"]:
-                print("DNI:", dni)
-                for clave, valor in datos.items():
-                    print(clave + ":", valor)
-                print()
-
-
 print("BIENVENIDO AL SISTEMA DE GESTIÓN DE PACIENTES")
 
 pacientes = {}
+cargar_pacientes_desde_excel()
+
+def menu():
+    opcion = ""
+    while opcion != "6":
+        print("\n===== Consultorio de Nutrición =====")
+        print("1. Ingresar paciente")
+        print("2. Listar pacientes")
+        print("3. Eliminar paciente")
+        print("4. Modificar paciente")
+        print("5. Guardar lista")
+        print("6. Terminar")
+
+        opcion = input("Elige una opción: ")
+
+        if opcion == "1":
+            ingresar_paciente()
+        elif opcion == "2":
+            lista_pacientes()
+        elif opcion == "3":
+            dni = input("Ingrese el DNI del paciente que desea eliminar: ")
+            eliminar_paciente(dni)
+        elif opcion == "4":
+            dni = input("Ingrese el DNI del paciente que desea modificar: ")
+            modificar_paciente(dni)
+        elif opcion == "5":
+            guardar_en_excel()
+        elif opcion == "6":
+            print("¡Hasta luego!")
+        else:
+            print("Opción inválida. Por favor, ingrese una opción válida.")
 
 menu()
+
 guardar_en_excel()
