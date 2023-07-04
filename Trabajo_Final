@@ -3,6 +3,7 @@ import openpyxl
 
 def ingresar_paciente():
     print("Introduzca los datos solicitados del paciente:")
+    #dni = int(input("DNI(sin puntos): "))
     while True: # Intenta convertir la entrada a un entero
         try:
             dni = int(input("DNI(sin puntos): ")) 
@@ -42,6 +43,7 @@ def ingresar_paciente():
             break
         except ValueError:
             print("Error: Por favor, ingrese un número válido para el nivel de actividad física (1, 2 o 3)")
+
     while True:
         try:
             peso = float(input("Peso (Kg): "))
