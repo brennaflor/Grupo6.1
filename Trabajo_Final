@@ -3,7 +3,12 @@ import openpyxl
 
 def ingresar_paciente():
     print("Introduzca los datos solicitados del paciente:")
-    dni = input("DNI: ")
+    while True: # Intenta convertir la entrada a un entero
+        try:
+            dni = int(input("DNI(sin puntos): ")) 
+            break
+        except ValueError:
+            print("Error: Por favor, ingrese un número valido para la el DNI")
 
     if dni in pacientes:
         print("Ya existe un paciente con el DNI", dni)
