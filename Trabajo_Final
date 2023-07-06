@@ -266,7 +266,7 @@ def menu (): #Función para mostrar menú de opciones y realizar las acciones co
 
 print("BIENVENIDO AL SISTEMA DE GESTIÓN DE PACIENTES")
 
-pacientes = {}
+pacientes = {} #Diccionario que almacena los datos del paciente.
 
 menu()
 guardar_en_excel()
